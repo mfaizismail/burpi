@@ -10,7 +10,7 @@ Semua data tersimpan di **database SQLite di HP atau tablet**, jadi aplikasi tet
 APK dibuat otomatis oleh **GitHub Actions**. Kamu tidak perlu menginstal Android Studio.
 
 1. Buat akun di <https://github.com> kalau belum punya.
-2. Klik **New repository**. Beri nama `burpi-pos` dan pilih **Private**. Repo wajib private karena berisi kunci tanda tangan aplikasi.
+2. Klik **New repository**, lalu beri nama `burpi-pos`. Repo boleh publik atau private. Kunci tanda tangan aplikasi sudah terenkripsi, dan kata sandinya disimpan sebagai secret.
 3. Ekstrak file zip proyek ini. Di halaman repo, klik **uploading an existing file**, lalu seret **semua isi folder** ke situ dan klik **Commit changes**.
    - Pastikan folder `.github` ikut terunggah. Folder ini tersembunyi di Mac dan Windows.
    - Kalau tidak ikut, buat manual: **Add file → Create new file**, isi nama `.github/workflows/build-apk.yml`, lalu tempel isi file tersebut.
@@ -29,7 +29,7 @@ Minimal Android 7.0. Tampilan paling nyaman di tablet, tapi juga bisa dipakai di
 
 Unggah file yang berubah ke repo. GitHub otomatis membuat APK baru dengan nomor versi lebih tinggi. Pasang APK baru **di atas** aplikasi lama, dan data tetap aman.
 
-> ⚠️ Jangan hapus atau mengganti `android/app/burpi-pos.jks`. Kalau kuncinya berubah, APK baru tidak bisa dipasang sebagai update. Aplikasi lama harus dihapus dulu, dan **datanya ikut hilang**.
+> ⚠️ Kunci tanda tangan aplikasi tersimpan terenkripsi di `android/app/burpi-pos.jks.enc`. Kata sandinya ada di secret repo `BURPI_KEYSTORE_PASSWORD` (Settings → Secrets and variables → Actions). Jangan hapus atau mengganti keduanya. Kalau kuncinya berubah, APK baru tidak bisa dipasang sebagai update. Aplikasi lama harus dihapus dulu, dan **datanya ikut hilang**.
 > Sebelum memperbarui, biasakan **Ekspor database** dulu.
 
 ---

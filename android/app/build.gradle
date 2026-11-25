@@ -18,19 +18,25 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    // Kunci tanda tangan tetap. JANGAN diganti/dihapus: APK dengan kunci berbeda
-    // tidak bisa dipasang sebagai update, sehingga aplikasi harus dihapus dulu (data ikut hilang).
+    // Kunci tanda tangan: file burpi-pos.jks dibuat dari burpi-pos.jks.enc saat build di GitHub Actions,
+    // memakai secret BURPI_KEYSTORE_PASSWORD. JANGAN ganti kuncinya: APK dengan kunci berbeda
+    // tidak bisa dipasang sebagai update (aplikasi harus dihapus dulu dan datanya ikut hilang).
+    def ksPass = System.getenv("BURPI_KEYSTORE_PASSWORD")
+    def ksFile = file("burpi-pos.jks")
     signingConfigs {
         release {
-            storeFile file("burpi-pos.jks")
-            storePassword "burpi-pos-2026"
-            keyAlias "burpi"
-            keyPassword "burpi-pos-2026"
+            if (ksPass && ksFile.exists()) {
+                storeFile ksFile
+                storeType "pkcs12"
+                storePassword ksPass
+                keyAlias "burpi"
+                keyPassword ksPass
+            }
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (ksPass && ksFile.exists()) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

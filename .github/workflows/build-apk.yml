@@ -1,0 +1,54 @@
+name: Build APK BURPI POS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install dependensi
+        run: npm ci
+
+      - name: Siapkan web app & sinkron ke Android
+        run: npm run sync
+
+      - name: Pasang kunci tanda tangan
+        env:
+          BURPI_KEYSTORE_PASSWORD: ${{ secrets.BURPI_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$BURPI_KEYSTORE_PASSWORD" ]; then echo "Secret BURPI_KEYSTORE_PASSWORD belum diisi di Settings > Secrets and variables > Actions"; exit 1; fi
+          openssl enc -d -aes-256-cbc -pbkdf2 -in android/app/burpi-pos.jks.enc -out android/app/burpi-pos.jks -pass env:BURPI_KEYSTORE_PASSWORD
+
+      - name: Build APK
+        working-directory: android
+        env:
+          BURPI_KEYSTORE_PASSWORD: ${{ secrets.BURPI_KEYSTORE_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Ganti nama file
+        run: cp android/app/build/outputs/apk/release/app-release.apk "BURPI-POS-v1.0.${{ github.run_number }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BURPI-POS-v1.0.${{ github.run_number }}
+          path: BURPI-POS-v1.0.${{ github.run_number }}.apk
+          retention-days: 90
