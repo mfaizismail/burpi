@@ -1,0 +1,27 @@
+{
+  "name": "burpi-pos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BURPI POS - aplikasi kasir offline untuk Android",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "sync": "npm run build && npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor-community/sqlite": "8.1.1",
+    "@capacitor/android": "8.6.2",
+    "@capacitor/app": "^8.0.0",
+    "@capacitor/app-launcher": "8.0.1",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/filesystem": "8.1.5",
+    "@capacitor/share": "8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.2",
+    "@fontsource/inclusive-sans": "5.3.0",
+    "esbuild": "^0.25.0",
+    "jszip": "3.10.2",
+    "sql.js": "^1.13.0",
+    "xlsx": "0.18.5"
+  }
+}

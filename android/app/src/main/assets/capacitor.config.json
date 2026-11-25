@@ -1,0 +1,14 @@
+{
+	"appId": "id.burpi.pos",
+	"appName": "BURPI POS",
+	"webDir": "www",
+	"android": {
+		"allowMixedContent": false,
+		"backgroundColor": "#1e4fd8"
+	},
+	"plugins": {
+		"CapacitorSQLite": {
+			"androidIsEncryption": false
+		}
+	}
+}
